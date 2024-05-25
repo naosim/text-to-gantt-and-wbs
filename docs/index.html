@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Text to Gantt and WBS</title>
+    <link rel="stylesheet" href="https://jsganttimproved.github.io/jsgantt-improved/dist/jsgantt.css" />
+    <style>
+      textarea {
+        width: 70%;
+        height: 320px;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Text To Gantt and WBS</h1>
+<textarea>
+サンプルプロジェクト
+	Define Chart API data{pRes:Mario,pNotes:Some Notes text}
+		Chart Object data{pStart:2019-06-20,pEnd:2019-07-20,pMile:1,pRes:Henrique,pComp:100}
+		Task Objects data{pRes:Henrique,pComp:40}
+			<a href='yahoo.com'>Constructor Proc #1234 of February 2019</a> data{pID:121,pStart:2019-06-21,pEnd:,pRes:Pedro,pComp:60,pDuration:3 days}
+			Task Variables data{pID:122,pStart:2019-07-06,pEnd:2019-07-11,pRes:Mario John Silva,pComp:60,pDepend:121}
+			Task by Minute/Hour data{pID:123,pStart:2019-07-01,pEnd:2019-07-15 12:00,pRes:Mario,pComp:60}
+			Test Plan End data{pStart:2019-07-09,pEnd:2019-07-29,pPlanStart:2019-07-09,pPlanEnd:2019-09-29,pRes:Anyone,pComp:60,pDepend:123,pCaption:This is a caption,pNotes:null,pCost:34}
+	Create HTML Shell data{pStart:2019-07-24,pEnd:2019-07-24,pRes:Mario,pComp:20,pDepend:122}
+	Code Javascript data{pRes:Mario}
+		Define Variables data{pStart:2019-06-25,pEnd:2019-07-17,pPlanStart:2019-06-24,pPlanEnd:2019-07-15 12:00,pRes:Mario,pComp:30}
+		Calculate One Day data{pStart:2019-07-15 00:00,pEnd:2019-07-16 00:00,pRes:Henrique,pComp:40}
+		Draw Task Items data{pRes:Someone,pComp:40}
+			Task Label Table data{pID:332,pStart:2019-07-06,pEnd:2019-07-09,pRes:Mario,pComp:60}
+			Task Scrolling Grid data{pID:333,pStart:2019-07-11,pEnd:2019-07-20,pRes:Mario,pDepend:332}
+		Draw Task <i>Bars</i> data{pRes:Anybody,pComp:67}
+			Test Bar Task data{pStart:2019-03-26,pEnd:2019-04-11,pRes:Mario,pComp:60,pBarText:this is a bar text}
+			Calculate Start/Stop data{pID:A342,pStart:2019-04-12,pEnd:2019-05-18,pRes:Mario,pComp:60}
+			Draw Task Div data{pID:343,pStart:2019-05-13,pEnd:2019-05-17,pRes:Mario,pComp:60}
+			Draw Completion Div data{pStart:2019-05-17,pEnd:2019-06-04,pRes:Mario,pComp:60,pDepend:A342,343}
+		Just plan dates data{pPlanStart:2019-07-17,pPlanEnd:2021-09-15,pRes:Mario,pDepend:333}
+		Just dates data{pStart:2019-07-17,pEnd:2021-09-15,pRes:Mario,pDepend:333}
+  </textarea>
+<h2>Gantt</h2>
+  <div style="position:relative" class="gantt" id="GanttChartDIV"></div>
+<h2>WBS</h2>
+<pre class="mermaid mindmap"></pre>
+<h2>TaskFlow</h2>
+<pre class="mermaid taskFlow"></pre>
+
+
+    <script src="https://jsganttimproved.github.io/jsgantt-improved/dist/jsgantt.js"></script>
+    <script src="https://naosim.github.io/jslib/treenode.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+    <script src="./index.js"></script>
+  </body>
+</html>
