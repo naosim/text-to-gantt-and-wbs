@@ -16,7 +16,17 @@ class TreeNodeToJSGanttDataConvertor {
   static createAutoId() {
     return TreeNodeToJSGanttDataConvertor.autoIdIndex++;
   }
-  static convertTargetKeys = ["start", "end", "res", "comp", "note", "ID"]
+  static convertMap = {
+    "start": "pStart", 
+    "end": "pEnd",
+    "res": "pRes",
+    "comp": "pComp",
+    "depend": "pDepend",
+    "note": "pNotes",
+    "notes": "pNotes",
+    "ID": "pID",
+    "id": "pID",
+  }
   /**
    * 
    * @param {string} text 
@@ -29,6 +39,16 @@ class TreeNodeToJSGanttDataConvertor {
     // @ts-ignore
     const data = dataText.split(",").map(v => {const [key, value] = v.split(":").map(n => n.trim()); return {key, value}}).reduce((memo, v) => {memo[v.key] = v.value; return memo}, {});
     data.pName = pName.trim();
+
+    // pを省略した場合に対応
+    Object.keys(TreeNodeToJSGanttDataConvertor.convertMap).forEach(k => {
+      if(data[k] === undefined) {
+        return;
+      }
+      data[TreeNodeToJSGanttDataConvertor.convertMap[k]] = data[k];
+    })
+
+
     data.pParent = parentID;
     if(data.pClass === undefined) {
       data.pClass = "ggroupblack" 

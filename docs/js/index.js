@@ -1,18 +1,4 @@
-var g = new JSGantt.GanttChart(document.getElementById('GanttChartDIV'), 'month');
-
-g.setOptions({
-  vCaptionType: 'Complete',  // Set to Show Caption : None,Caption,Resource,Duration,Complete,     
-  vQuarterColWidth: 36,
-  vDateTaskDisplayFormat: 'day dd month yyyy', // Shown in tool tip box
-  vDayMajorDateDisplayFormat: 'mon yyyy - Week ww',// Set format to dates in the "Major" header of the "Day" view
-  vWeekMinorDateDisplayFormat: 'dd mon', // Set format to display dates in the "Minor" header of the "Week" view
-  vLang: 'ja',
-  vShowTaskInfoLink: 1, // Show link in tool tip (0/1)
-  vShowEndWeekDate: 0,  // Show/Hide the date for the last day of the week in header for daily
-  vUseSingleCell: 10000, // Set the threshold cell per table row (Helps performance for large data.
-  vFormatArr: ['Day', 'Week', 'Month', 'Quarter'], // Even with setUseSingleCell using Hour format on such a large chart can cause issues in some browsers,
-  vDateTaskTableDisplayFormat:"yyyy/mm/dd"
-});
+document.querySelector("textarea").value = datatext;
 
 /**
  * 
@@ -73,14 +59,36 @@ function treeNodesToTaskFlow(nodes, direction = "TB") {
   return `flowchart ${direction}\n${text}\n${arrow}`;
 }
 
+/**
+ * 
+ * @param {JSGanttTaskData[]} tasks 
+ */
+function setupGantt(selector, tasks) {
+  //document.getElementById('GanttChartDIV')
+  const g = new JSGantt.GanttChart(document.querySelector(selector), 'month');
+  g.setOptions({
+    vCaptionType: 'Complete',  // Set to Show Caption : None,Caption,Resource,Duration,Complete,     
+    vQuarterColWidth: 36,
+    vDateTaskDisplayFormat: 'day dd month yyyy', // Shown in tool tip box
+    vDayMajorDateDisplayFormat: 'mon yyyy - Week ww',// Set format to dates in the "Major" header of the "Day" view
+    vWeekMinorDateDisplayFormat: 'dd mon', // Set format to display dates in the "Minor" header of the "Week" view
+    vLang: 'ja',
+    vShowTaskInfoLink: 1, // Show link in tool tip (0/1)
+    vShowEndWeekDate: 0,  // Show/Hide the date for the last day of the week in header for daily
+    vUseSingleCell: 10000, // Set the threshold cell per table row (Helps performance for large data.
+    vFormatArr: ['Day', 'Week', 'Month', 'Quarter'], // Even with setUseSingleCell using Hour format on such a large chart can cause issues in some browsers,
+    vDateTaskTableDisplayFormat:"yyyy/mm/dd"
+  });
+  tasks.forEach(v => g.AddTaskItemObject(v))
+  g.Draw();
+}
 
 const orgText = document.querySelector("textarea")?.value.trim();
 const nodes = NestedTextParser.parse(orgText);
-treeNodesToJSGanttDatas(nodes).forEach(v => g.AddTaskItemObject(v))
-g.Draw();
-
+setupGantt('#GanttChartDIV', treeNodesToJSGanttDatas(nodes));
 
 console.log(nodes);
+
 document.querySelector(".mindmap").innerHTML = treeNodesToMindmap(nodes);
 document.querySelector(".taskFlow").innerHTML = treeNodesToTaskFlow(nodes);
 mermaid.initialize({
