@@ -14,6 +14,12 @@ g.setOptions({
   vDateTaskTableDisplayFormat:"yyyy/mm/dd"
 });
 
+/**
+ * 
+ * @param {TreeNode[]} mindmapNodes 
+ * @param {string} direction 
+ * @returns 
+ */
 function treeNodesToMindmap(mindmapNodes, direction = "TB") {  
   const rectText = mindmapNodes.map(node => {
     console.log(node.isRoot)
@@ -67,38 +73,6 @@ function treeNodesToTaskFlow(nodes, direction = "TB") {
   return `flowchart ${direction}\n${text}\n${arrow}`;
 }
 
-function treeNodesToJSGanttDatas(nodes) { 
-  const convertTargetKeys = ["start", "end", "res", "comp", "note", "ID"]
-  
-  return nodes.slice(1).map((v, i) => {
-    var [pName, dataText] = v.text.split("data{");
-    dataText = dataText.split("}")[0];
-    const data = dataText.split(",").map(v => {const [key, value] = v.split(":").map(n => n.trim()); return {key, value}}).reduce((memo, v) => {memo[v.key] = v.value; return memo}, {});
-    data.pName = pName.trim();
-    if(v.parentNode.nestCount == 0) {
-      data.pParent = 0;
-    } else {
-      data.pParent = v.parentNode.data.pID
-    }
-    if(data.pClass === undefined) {
-      data.pClass = "ggroupblack" 
-    }
-    if(data.pOpen === undefined) {
-      data.pOpen = 1
-    }
-    if(data.pID === undefined) {
-      data.pID = `AUTOID${i}`
-    }
-    v.data = data;
-    
-    // 親をグループにする
-    if(!v.parentNode.isRoot) {
-      v.parentNode.data.pGroup = 1;
-    }
-    
-    return data;
-  })
-}
 
 const orgText = document.querySelector("textarea")?.value.trim();
 const nodes = NestedTextParser.parse(orgText);
