@@ -1,12 +1,13 @@
 # text-to-gantt-and-wbs
 テキストからガントチャートとWBSを生成できるツールです。
+ガントチャートにはJSGantt、WBSにはmermaid.jsを用いています。
 
 ## sample
 https://naosim.github.io/text-to-gantt-and-wbs/
 
 ## 使い方
 1. プログラムを一式DLする  
-2. datatext.jsを編集する
+2. datatext.jsをタスクフォーマットに従って編集する
 3. jsGanttOptions.jsをお好みで編集する
 4. index.htmlをブラウザで開く
 
@@ -26,12 +27,17 @@ https://naosim.github.io/text-to-gantt-and-wbs/
 ```
 タスクは、空白、タスク名、タスクデータの情報で構成します。
 タスク名とタスクデータとの間は`//`で区切ります。 
+次にタスクのそれぞれの情報について説明します。
 
+### 空白
 空白はタブまたはスペース2つを入れることにより、タスクの深さを表現します。 
 
+### タスク名
 タスク名には任意のタスク名を設定してください。  
-htmlタグも設定可能です。
+htmlタグも設定可能です。  
+タスク名から区切り文字`//`までの空白は無視されます。
 
+### タスクデータ
 タスクデータはkeyとvalueのペアで入力します。  
 `key:value`   
 JSONを1行でダブルクオートなしで書くイメージです。  
