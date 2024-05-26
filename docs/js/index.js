@@ -84,8 +84,8 @@ function treeNodesToTaskFlow(nodes, direction = "TB") {
  * @param {JSGanttTaskData[]} tasks 
  */
 function setupGantt(selector, tasks) {
-  const g = new JSGantt.GanttChart(document.querySelector(selector), 'day');
-  g.setOptions(jsGanttOptions); // jsGanttOptionsはjsGanttOptions.jsで変更可能です。
+  const g = new JSGantt.GanttChart(document.querySelector(selector), jsGanttConfig.displayFormat);
+  g.setOptions(jsGanttConfig.options); // jsGanttOptionsはjsGanttOptions.jsで変更可能です。
   tasks.forEach(v => g.AddTaskItemObject(v))
   g.Draw();
 }
@@ -94,8 +94,7 @@ const orgText = document.querySelector("textarea")?.value.trim();
 const nodes = NestedTextParser.parse(orgText);
 setupGantt('#GanttChartDIV', treeNodesToJSGanttDatas(nodes));
 
-setTimeout(() => console.log(nodes), 1000);
-
+console.log(nodes);
 
 document.querySelector(".mindmap").innerHTML = treeNodesToMindmap(nodes);
 document.querySelector(".taskFlow").innerHTML = treeNodesToTaskFlow(nodes);
