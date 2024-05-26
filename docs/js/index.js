@@ -1,5 +1,27 @@
 document.querySelector("textarea").value = datatext;
 
+function nodeToText(node) {
+  /** @type {JSGanttTaskData} */
+  const data = node.data;
+  const lines = [];
+  if(data.pRes) {
+    lines.push(`担当:${data.pRes}`);
+  }
+  if(data.pStart) {
+    lines.push(`開始日:${data.pStart}`);
+  }
+  if(data.pEnd) {
+    lines.push(`期日:${data.pEnd}`);
+  }
+  if(data.pNotes) {
+    lines.push(`メモ:${data.pNotes}`);
+  }
+  if(lines.length == 0) {
+    return data.pName
+  }
+  return data.pName + "<hr />" + lines.join("\n");
+}
+
 /**
  * 
  * @param {TreeNode[]} mindmapNodes 
@@ -12,7 +34,7 @@ function treeNodesToMindmap(mindmapNodes, direction = "TB") {
     if(node.isRoot) {
       return `0[${node.text}]`;
     }
-    return `${node.data.pID}["${node.data.pName}\n${node.data.pRes}"]`;
+    return `${node.data.pID}["${nodeToText(node)}"]`;
   }).join("\n");
   
   const arrowText = mindmapNodes.map(node => {
@@ -25,20 +47,18 @@ function treeNodesToMindmap(mindmapNodes, direction = "TB") {
     }
     return lines.join("\n");
   }).join("\n");
-  return `flowchart ${direction}\n${rectText}\n${arrowText}`;
+  return `---\ntitle: ${mindmapNodes[0].text}\n---\nflowchart  ${direction}\n${rectText}\n${arrowText}`;
   // return "flowchart TD\n" + rectText + "\n" + arrowText;
 }
 
 function treeNodesToTaskFlow(nodes, direction = "TB") {
-  function nodeToText(node) {
-    return `${node.data.pName}\n${node.data.pRes}\nstart:${node.data.pStart}\nend:${node.data.pEnd}`
-  }
+  
   function draw(node) {
     if(node.childNodes.length == 0) {
       return `${node.data.pID}["${nodeToText(node)}"]`;
     } else {
       const childText = node.childNodes.map(v => draw(v)).join("\n");
-      return `subgraph ${node.data.pID}["${node.data.pName}\n${node.data.pRes}"]\ndirection ${direction}\n${childText}\nend`;
+      return `subgraph ${node.data.pID}["${node.data.pName}(${node.data.pRes})"]\ndirection ${direction}\n${childText}\nend`;
     }
   }
   function drawChildArrow(node) {
@@ -56,7 +76,7 @@ function treeNodesToTaskFlow(nodes, direction = "TB") {
   const text = root.childNodes.map(draw).join("\n");
   const arrow = nodes.map(drawChildArrow).join("\n")
   
-  return `flowchart ${direction}\n${text}\n${arrow}`;
+  return `---\ntitle: ${root.text}\n---\nflowchart ${direction}\n${text}\n${arrow}`;
 }
 
 /**

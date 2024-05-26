@@ -2,9 +2,13 @@
  * @typedef {Object} JSGanttTaskData
  * @property {string} pID
  * @property {string} pName
+ * @property {string} pStart
+ * @property {string} pEnd
+ * @property {string} pRes
  * @property {any} pParent
  * @property {string} pClass
  * @property {number} pOpen
+ * @property {string} pNotes
  */
 
 
@@ -18,10 +22,15 @@ class TreeNodeToJSGanttDataConvertor {
   }
   static convertMap = {
     "start": "pStart", 
+    "s": "pStart",
     "end": "pEnd",
+    "e": "pEnd",
     "res": "pRes",
+    "r": "pRes",
     "comp": "pComp",
+    "c": "pComp",
     "depend": "pDepend",
+    "dep": "pDepend",
     "note": "pNotes",
     "notes": "pNotes",
     "ID": "pID",
@@ -33,8 +42,8 @@ class TreeNodeToJSGanttDataConvertor {
    * @param {any} parentID
    */
   static parse(text, parentID) {
-    var [pName, dataText] = text.split("data{");
-    dataText = dataText.split("}")[0];
+    var [pName, dataText] = text.split("//");
+    dataText = dataText.trim();
     /** @type {JSGanttTaskData} */
     // @ts-ignore
     const data = dataText.split(",").map(v => {const [key, value] = v.split(":").map(n => n.trim()); return {key, value}}).reduce((memo, v) => {memo[v.key] = v.value; return memo}, {});
