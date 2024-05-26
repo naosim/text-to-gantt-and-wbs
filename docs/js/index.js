@@ -1,4 +1,23 @@
-document.querySelector("textarea").value = datatext;
+/**
+ * @param {string} selector 
+ * @param {string} value 
+ */
+function setDomValue(selector, value) {// tsconfigのエラー対策です...
+  // @ts-ignore
+  document.querySelector(selector).value = value;
+}
+
+/**
+ * @param {string} selector 
+ * @param {string} innerHTML 
+ */
+function setDomInnerHTML(selector, innerHTML) {// tsconfigのエラー対策です...
+  // @ts-ignore
+  document.querySelector(selector).innerHTML = innerHTML;
+}
+
+
+setDomValue("textarea", datatext);
 
 function nodeToText(node) {
   /** @type {JSGanttTaskData} */
@@ -84,6 +103,7 @@ function treeNodesToTaskFlow(nodes, direction = "TB") {
  * @param {JSGanttTaskData[]} tasks 
  */
 function setupGantt(selector, tasks) {
+  // @ts-ignore
   const g = new JSGantt.GanttChart(document.querySelector(selector), jsGanttConfig.displayFormat);
   g.setOptions(jsGanttConfig.options); // jsGanttOptionsはjsGanttOptions.jsで変更可能です。
   tasks.forEach(v => g.AddTaskItemObject(v))
@@ -95,9 +115,10 @@ const nodes = NestedTextParser.parse(orgText);
 setupGantt('#GanttChartDIV', treeNodesToJSGanttDatas(nodes));
 
 console.log(nodes);
+setDomInnerHTML(".mindmap", treeNodesToMindmap(nodes));
+setDomInnerHTML(".taskFlow", treeNodesToTaskFlow(nodes));
 
-document.querySelector(".mindmap").innerHTML = treeNodesToMindmap(nodes);
-document.querySelector(".taskFlow").innerHTML = treeNodesToTaskFlow(nodes);
+// @ts-ignore
 mermaid.initialize({
   startOnLoad:true,
   securityLevel: 'loose',
