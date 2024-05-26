@@ -42,21 +42,28 @@ class TreeNodeToJSGanttDataConvertor {
    * @param {any} parentID
    */
   static parse(text, parentID) {
-    var [pName, dataText] = text.split("//");
-    dataText = dataText.trim();
     /** @type {JSGanttTaskData} */
-    // @ts-ignore
-    const data = dataText.split(",").map(v => {const [key, value] = v.split(":").map(n => n.trim()); return {key, value}}).reduce((memo, v) => {memo[v.key] = v.value; return memo}, {});
-    data.pName = pName.trim();
+    var data;
+    if(text.indexOf("//") != -1) {
+      var [pName, dataText] = text.split("//");
+      dataText = dataText.trim();
+      /** @type {JSGanttTaskData} */
+      // @ts-ignore
+      data = dataText.split(",").map(v => {const [key, value] = v.split(":").map(n => n.trim()); return {key, value}}).reduce((memo, v) => {memo[v.key] = v.value; return memo}, {});
+      data.pName = pName.trim();
 
-    // pを省略した場合に対応
-    Object.keys(TreeNodeToJSGanttDataConvertor.convertMap).forEach(k => {
-      if(data[k] === undefined) {
-        return;
-      }
-      data[TreeNodeToJSGanttDataConvertor.convertMap[k]] = data[k];
-    })
+      // pを省略した場合に対応
+      Object.keys(TreeNodeToJSGanttDataConvertor.convertMap).forEach(k => {
+        if(data[k] === undefined) {
+          return;
+        }
+        data[TreeNodeToJSGanttDataConvertor.convertMap[k]] = data[k];
+      })
 
+    } else {
+      // @ts-ignore
+      data = {pName:text.trim()}
+    }
 
     data.pParent = parentID;
     if(data.pClass === undefined) {
@@ -67,6 +74,9 @@ class TreeNodeToJSGanttDataConvertor {
     }
     if(data.pID === undefined) {
       data.pID = `AUTOID${TreeNodeToJSGanttDataConvertor.createAutoId()}`
+    }
+    if(data.pRes === undefined) {
+      data.pRes = "" 
     }
     // pGroup=1は小要素設定時に設定される。ここでは設定しない
     return data;
