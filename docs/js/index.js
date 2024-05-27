@@ -110,16 +110,29 @@ function setupGantt(selector, tasks) {
   g.Draw();
 }
 
-const orgText = document.querySelector("textarea")?.value.trim();
-const nodes = NestedTextParser.parse(orgText);
-setupGantt('#GanttChartDIV', treeNodesToJSGanttDatas(nodes));
-
-console.log(nodes);
-setDomInnerHTML(".mindmap", treeNodesToMindmap(nodes));
-setDomInnerHTML(".taskFlow", treeNodesToTaskFlow(nodes));
-
+function submit() {
+  const orgText = document.querySelector("textarea")?.value.trim();
+  const nodes = NestedTextParser.parse(orgText);
+  setupGantt('#GanttChartDIV', treeNodesToJSGanttDatas(nodes));
+  
+  console.log(nodes);
+  setDomInnerHTML(".mindmap", treeNodesToMindmap(nodes));
+  setDomInnerHTML(".taskFlow", treeNodesToTaskFlow(nodes));
+  
+  document.querySelectorAll(".mermaid").forEach(v => v.removeAttribute('data-processed'));
+  
+  // 内部はasyncだから気をつけて
+  // @ts-ignore
+  mermaid.run({
+    querySelector: '.mermaid'
+  });
+  
+}
 // @ts-ignore
 mermaid.initialize({
-  startOnLoad:true,
+  startOnLoad:false,
   securityLevel: 'loose',
 });
+document.querySelector("#submitButton")?.addEventListener("click", submit)
+
+submit();
