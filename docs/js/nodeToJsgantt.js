@@ -35,6 +35,9 @@ class TreeNodeToJSGanttDataConvertor {
     "notes": "pNotes",
     "ID": "pID",
     "id": "pID",
+    "開始": "pStart",
+    "終了": "pEnd",
+    "担当": "pRes"
   }
   /**
    * 
